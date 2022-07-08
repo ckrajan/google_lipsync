@@ -338,7 +338,6 @@ function lipsync() {
                     // });
                     // video.srcObject = stream;
 
-                    video.style.display = "none";
                     video.play();
 
                     video.addEventListener('play', (event) => {
@@ -398,6 +397,12 @@ function lipsync() {
                         if (!kickStartSuccess) browser_checker().setIsSlow(true)
                     }, 15000)
                     kickStartWorkerPrediction(() => resolve(true))
+
+                    document.getElementById('stop-button').disabled = false;
+                    document.getElementById('final_average').disabled = false;
+                    document.getElementById("loader").style.display = "none";
+                    document.getElementById('your-prediction-wrapper').style.display = "inline";
+                    document.getElementById('baseline-prediction-wrapper').style.display = "inline";
                 })
                 .catch(err => {
                     console.log(err)
@@ -519,7 +524,7 @@ function lipsync() {
         var dimensionScr = Math.max(0, (1.0 - finalavgScore));
         dimensionScr = 1 / (1 + Math.exp(-15 * (2 * dimensionScr - 1.3)))
         var crntScore = dimensionScr * 1000
-        console.log("Score out of 1000: ", crntScore);
+        console.log("Score out of 1000: ", crntScore.toFixed(1));
         return crntScore;
     }
 

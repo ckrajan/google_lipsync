@@ -82,33 +82,85 @@ limitations under the License.
       margin-right: -50%;
       z-index: 9999;
     }
+
+    #loader {
+      position: fixed;
+      left: 850px;
+      top: 300px;
+      border-top: 16px solid blue;
+      border-right: 16px solid green;
+      border-bottom: 16px solid red;
+      border-left: 16px solid pink;
+
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    button {
+      font-family: sans-serif;
+      display: inline-block;
+      background-color: #eb9748;
+      border: none;
+      color: black;
+      padding: 12px 16px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 24px;
+    }
+
+    ::-webkit-file-upload-button {
+      background: #eb9748;
+      color: black;
+      padding: 1em;
+      font-size: 16px;
+    }
+
+    button[disabled] {
+      background-color: #A9A9A9;
+    }
   </style>
 
 </head>
 
-<body>
+<body style="background-color: rgb(192, 246, 255);">
+
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="play-page-wrapper" class="page-wrapper play-el">
     <input type="file" id="upload" accept="video/mp4,video/x-m4v,video/*">
     <a id="upload-button" class="cameratag_prompt_label cam_icon upload_icon"><i
         class="fas fa-cloud-upload-alt"></i></a>
 
-    <button id="start-button">Start</button>
-    <button id="stop-button">Stop</button>
-    <button id="final_average">Final score</button>
+    <button id="start-button" style="display:none;" disabled="disabled">Start</button>
+    <button id="stop-button" style="display:none;" disabled="disabled">Stop</button>
+    <button id="final_average" style="display:none;" disabled="disabled">Final score</button>
 
     <div id="debug-score"></div>
     <div id="compare_container">
-      <div id="your-prediction-wrapper">
+      <div id="your-prediction-wrapper" style="display:none;">
         <div id="your-prediction"></div>
         <div>Prediction</div>
       </div>
-      <div id="baseline-prediction-wrapper">
+      <div id="baseline-prediction-wrapper" style="display:none;">
         <div id="baseline-prediction"></div>
         <div>Baseline</div>
       </div>
     </div>
     <div id="final-score"></div>
+
+    <div id="loader" style="display:none;"></div>
+
     <div id="camera-element-wrapper">
       <!-- <div id="camera-feed-wrapper" class="camera-feed-wrapper">
      <video id="camera-video" playsinline width="640" height="480"></video>
@@ -151,5 +203,6 @@ limitations under the License.
 <script src="./third_party/facemesh/triangulation.js"></script>
 <script src="./asset/js/lipsync-engine.js"></script>
 <script type="module" src="./asset/js/index.js"></script>
+<script type="module" src="./asset/js/lipsync-engine.js"></script>
 
 </html>
