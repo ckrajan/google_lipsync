@@ -267,7 +267,8 @@ function lipsync() {
 
     function TryStop() {
         if (gameStoped) {
-            video.srcObject.getTracks()[0].stop();
+            // video.srcObject.getTracks()[0].stop();
+            video.pause();
         }
     }
 
@@ -325,18 +326,22 @@ function lipsync() {
         model = predictor
         gameUpdate = updateFunction
         return new Promise(async (resolve, reject) => {
-            videoid = camid;
+            video = camid;
             let cameraPromise = new Promise(async (camresolve, camreject) => {
                 try {
-                    video = document.getElementById(videoid);
-                    const stream = await navigator.mediaDevices.getUserMedia({
-                        'audio': false,
-                        'video': {
-                            facingMode: 'user'
-                        },
-                    });
-                    video.srcObject = stream;
-                    video.onloadedmetadata = () => {
+                    // video = document.getElementById(videoid);
+                    // const stream = await navigator.mediaDevices.getUserMedia({
+                    //     'audio': false,
+                    //     'video': {
+                    //         facingMode: 'user'
+                    //     },
+                    // });
+                    // video.srcObject = stream;
+
+                    video.style.display = "none";
+                    video.play();
+
+                    video.addEventListener('play', (event) => {
                         document.getElementById('camera-cropped-canvas').remove();
                         cropCanvas = null;
                         videoWidth = video.videoWidth;
@@ -368,13 +373,13 @@ function lipsync() {
                         frameCanvasCTX = frameCanvas.getContext('2d')
                         frameCanvas.width = cropCanvas.width;
                         frameCanvas.height = cropCanvas.height;
-                        frameCanvasCTX.translate(cropCanvas.width, 0);
-                        frameCanvasCTX.scale(-1, 1);
+                        // frameCanvasCTX.translate(cropCanvas.width, 0);
+                        // frameCanvasCTX.scale(-1, 1);
 
                         document.getElementById('baseline-video-wrapper').appendChild(cropCanvas);
                         permissionCallback(true)
                         camresolve(video);
-                    };
+                    });
                 }
                 catch (err) {
                     permissionCallback(false)
@@ -385,6 +390,7 @@ function lipsync() {
             Promise.all([cameraPromise])
                 .then(async res => {
                     video.play();
+                    video.controls = true;
 
                     cropCTX = cropCanvas.getContext('2d');
                     cropCTX.drawImage(video, cropX, cropY, cropWidth, cropHeight, cropCanvasX, cropCanvasY, cropWidth, cropHeight);
@@ -493,7 +499,7 @@ function lipsync() {
 
                 requestAnimationFrame(Update);
 
-            }, 100);
+            }, 33);
         }
     }
 
@@ -514,6 +520,7 @@ function lipsync() {
         dimensionScr = 1 / (1 + Math.exp(-15 * (2 * dimensionScr - 1.3)))
         var crntScore = dimensionScr * 1000
         console.log("Score out of 1000: ", crntScore);
+        return crntScore;
     }
 
     return {
