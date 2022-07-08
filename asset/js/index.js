@@ -15,10 +15,10 @@
  * =============================================================================
  */
 let lipsyncMain,
-baselineObj,
-model
+    baselineObj,
+    model
 
-function loadBaseline(){
+function loadBaseline() {
     return new Promise((resolve) => {
         $.getJSON("/asset/baseline/data.json", (json) => {
             resolve(json)
@@ -26,15 +26,36 @@ function loadBaseline(){
     });
 }
 
-function gameProcessing(result){
+function gameProcessing(result) {
     document.getElementById("debug-score").innerHTML = Math.round(result.matchScore)
 }
 
-$(window).on('load', async function() {
+// $(window).on('load', async function () {
+
+// });
+
+var startButton = document.getElementById('start-button');
+startButton.onclick = startPredicting;
+
+var stopButton = document.getElementById('stop-button');
+stopButton.onclick = stopPredicting;
+
+var finalAverage = document.getElementById('final_average');
+finalAverage.onclick = finalAverageScore;
+
+async function startPredicting() {
     model = await facemesh.load();
     baselineObj = await loadBaseline()
     lipsyncMain = lipsync()
     await lipsyncMain.init('camera-video', gameProcessing, model)
     await lipsyncMain.setup(baselineObj)
     lipsyncMain.start()
-});
+}
+
+function stopPredicting() {
+    lipsyncMain.stop()
+}
+
+function finalAverageScore() {
+    lipsyncMain.average()
+}
